@@ -1,0 +1,29 @@
+média = 0.0
+Português = 8.0
+Matemática = 6.0
+História = 7.5
+Ed_Física = 8.0
+Geografia = 7.5
+
+print("valor da média =\t\t\t\t", média) 
+média = (Português + Matemática + História)/3 
+print("valor da média atualizada = \t", média) 
+
+média = (Português + Matemática)/2
+print("valor da média = ", média) 
+
+nome = input("nome = ")
+sobrenome = input("sobrenome = ") 
+
+Português = float(input("Nota de Português = "))
+Matemática = float(input("Nota de Matemática = "))
+História = float(input("Nota de História = "))
+Ed_Física = float(input("Nota de Educação Física = "))
+Geografia = float(input("Nota de Geografia = "))
+
+print(nome, sobrenome, int(Português + Matemática + História + Ed_Física + Geografia)/5)
+
+if média <= 7:
+    print("Reprovado")
+else:
+    print("Aprovado")
