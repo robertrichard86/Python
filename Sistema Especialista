@@ -1,0 +1,13 @@
+v = True
+print("tipo de dado booleano = ",type(v))
+
+temperatura = int(input("temperatura = ")) 
+dor_cabeça = input("tem dor de cabeça = ") 
+coriza = input("tem coriza = ") 
+
+print("\ntemperatura = ", temperatura)
+print("tem dor de cabeça = ", dor_cabeça)
+print("tem coriza = ", coriza)
+
+gripe = temperatura > 37 and dor_cabeça or coriza
+print("o paciente tem gripe = ", gripe)
