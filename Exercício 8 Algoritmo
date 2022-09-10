@@ -1,0 +1,10 @@
+temperatura = int(input("Por favor, digite a Temperatura = ")) 
+umidade = int(input("Por favor, digite a Umidade Relativa do Ar = "))
+
+print("\nTemperatura = ", temperatura, "ºC")
+print("Unidade Relativa do Ar = ", umidade, "%")
+
+if temperatura >= 28 and umidade >= 50:
+    print("Previsão: Irá chover amanhã.")
+else:
+    print("\nPrevisão: Amanhã o dia será sem chuvas.")
