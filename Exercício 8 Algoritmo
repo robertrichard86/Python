@@ -5,6 +5,6 @@ print("\nTemperatura = ", temperatura, "ºC")
 print("Unidade Relativa do Ar = ", umidade, "%")
 
 if temperatura >= 28 and umidade >= 50:
-    print("Previsão: Irá chover amanhã.")
+    print("\nPrevisão: Irá chover amanhã.")
 else:
     print("\nPrevisão: Amanhã o dia será sem chuvas.")
