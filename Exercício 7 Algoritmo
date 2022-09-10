@@ -1,0 +1,43 @@
+arroz = 4.50
+feijão = 5.80
+açúcar = 2.30
+batata = 4.99
+óleo = 12.00
+bolacha_água_sal = 3.99
+bolacha_maizena = 4.69
+banana = 3.00
+couve_flor = 4.00
+leite_em_pó = 14.69
+
+print("Preço de Cada Item:")
+
+print("\nO preço do quilo do arroz é R$ ", arroz)
+print("O preço do quilo do feijão é R$ ", feijão)
+print("O preço do quilo do açúcar é R$ ", açúcar)
+print("O preço do quilo da batata é R$ ", batata)
+print("O preço do litro do óleo é R$ ", óleo)
+print("O preço do pacote da bolacha de água e sal é R$ ", bolacha_água_sal)
+print("O preço do pacote da bolacha de maizena é R$ ", bolacha_maizena)
+print("O preço da meia dúzia da banana é R$ ", banana)
+print("O preço do maço de couve-flor é R$ ", couve_flor)
+print("O preço da lata de leite em pó é R$ ", leite_em_pó)
+
+print("\nPreço dos Itens Referente às Quantidades:")
+
+print("\n5 quilos de arroz = R$ ", 5*(arroz))
+print("3 quilos de feijão = R$ ", 3*(feijão))
+print("2 quilos de açúcar = R$ ", 2*(açúcar))
+print("3 quilos de batata = R$ ", 3*(batata))
+print("5 litros de óleo = R$ ", 5*(óleo))
+print("1 dúzia e meia de banana = R$ ", 3*(banana))
+print("2 maços de couve-flor = R$ ", 2*(couve_flor))
+print("2 latas de leite em pó = R$ ", 2*(leite_em_pó))
+
+Valor_Total = (5*arroz+3*feijão+2*açúcar+3*batata+5*óleo+3*banana+2*couve_flor+2*leite_em_pó+bolacha_água_sal+bolacha_maizena)
+
+print("\nO Valor Total é = R$ ", Valor_Total)
+
+if Valor_Total <= 150.00:
+    print("Pagamento à vista")
+else:
+    print("Pagamento em até 6x s/ juros no Cartão de Crédito")
