@@ -1,0 +1,16 @@
+estação_ano = input("digite a estação do ano: ")
+meses = ""
+if estação_ano == "Verão":
+    meses = "dezembro - janeiro - fevereiro - março"
+elif estação_ano == "Primavera":
+     meses = "setembro - outubro - novembro - dezembro" 
+elif estação_ano == "Outono":
+     meses = "março - abril - maio - junho" 
+elif estação_ano == "Inverno":
+     meses = "junho - julho - agosto - setembro"
+else:
+    print("\nvocê não digitou uma estação valida.")
+    meses = "nenhum"
+    estação_ano = "nenhuma"
+print("\nestação do ano = ",estação_ano)
+print("\ncompreende os meses = ", meses) 
