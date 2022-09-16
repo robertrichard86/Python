@@ -1,0 +1,15 @@
+quantidade = int(input("Quantas roupas irá comprar?\t"))
+
+if quantidade <= 30 and quantidade >= 20:
+    preço_unidade = 28.00
+if quantidade < 20:
+    preço_unidade = 35.00
+if quantidade > 20:
+    preço_unidade = 20.00
+
+print("\nquantidade de peças de roupa =\t", quantidade)
+print("\npreço por unidade de acordo com a quantidade = R$ ", preço_unidade)
+print(f"\npreço da compra =: R$ {preço_unidade*quantidade:8.2f}")
+print("quantidade <= 30 and quantidade >= 20: ", quantidade <= 30 and quantidade >= 20)
+print("quantidade < 20: ", quantidade < 20)
+print("quantidade > 30: ",quantidade > 30)
