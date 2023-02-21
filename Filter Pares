@@ -1,0 +1,7 @@
+import random
+
+lista = [random.randint(1, 100) for _ in range(20)]
+pares = list(filter(lambda x: x % 2 == 0, lista))
+
+print(f"Lista gerada: {lista}")
+print(f"Números pares: {pares}")
