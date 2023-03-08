@@ -1,0 +1,29 @@
+pilha = []
+
+pilha.append(1)
+pilha.append(2)
+pilha.append(3)
+pilha.append(4)
+pilha.append(5)
+
+print("Pilha Carregada: ", pilha)
+
+removido = pilha.pop()
+print("Item Removido:", removido)
+print("Pilha Atualizada: ", pilha)
+
+removido = pilha.pop()
+print("Item Removido:", removido)
+print("Pilha Atualizada: ", pilha)
+
+removido = pilha.pop()
+print("Item Removido:", removido)
+print("Pilha Atualizada: ", pilha)
+
+removido = pilha.pop()
+print("Item Removido:", removido)
+print("Pilha Atualizada: ", pilha)
+
+removido = pilha.pop()
+print("Item Removido:", removido)
+print("Pilha Atualizada: ", pilha)
