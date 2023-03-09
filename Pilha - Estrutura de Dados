@@ -8,22 +8,13 @@ pilha.append(5)
 
 print("Pilha Carregada: ", pilha)
 
-removido = pilha.pop()
-print("Item Removido:", removido)
-print("Pilha Atualizada: ", pilha)
+def remover_elemento_da_pilha(pilha):
+    removido = pilha.pop()
+    print("Elemento Removido:", removido)
+    print("Pilha Atualizada: ", pilha)
 
-removido = pilha.pop()
-print("Item Removido:", removido)
-print("Pilha Atualizada: ", pilha)
-
-removido = pilha.pop()
-print("Item Removido:", removido)
-print("Pilha Atualizada: ", pilha)
-
-removido = pilha.pop()
-print("Item Removido:", removido)
-print("Pilha Atualizada: ", pilha)
-
-removido = pilha.pop()
-print("Item Removido:", removido)
-print("Pilha Atualizada: ", pilha)
+remover_elemento_da_pilha(pilha)
+remover_elemento_da_pilha(pilha)
+remover_elemento_da_pilha(pilha)
+remover_elemento_da_pilha(pilha)
+remover_elemento_da_pilha(pilha)
