@@ -1,0 +1,17 @@
+lista = []
+
+for i in range(5):
+    valor = int(input(f"Digite o {i+1}º valor: "))
+    lista.append(valor)
+
+print("A lista é:", lista)
+
+maior = max(lista)
+print("O maior valor é:", maior)
+
+menor = min(lista)
+print("O menor valor é:", menor)
+
+media = sum(lista) / len(lista)
+diferenca = media - maior
+print("A diferença entre a média e o maior valor é:", diferenca)
