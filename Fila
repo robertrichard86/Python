@@ -1,0 +1,31 @@
+class Fila:
+    def __init__(self):
+        self.fila = []
+    
+    def inserir(self, valor):
+        self.fila.append(valor)
+        
+    def remover(self):
+        if len(self.fila) == 0:
+            print("A fila está vazia!")
+            return None
+        valor = self.fila.pop(0)
+        return valor
+
+fila = Fila()
+
+fila.inserir(7)
+fila.inserir(8)
+fila.inserir(10)
+fila.inserir(20)
+fila.inserir(30)
+fila.inserir(40)
+fila.inserir(50)
+fila.inserir(60)
+fila.inserir(70)
+fila.inserir(80)
+
+while len(fila.fila) > 0:
+    valor = fila.remover()
+    if valor is not None:
+        print(f"Valor removido: {valor}")
