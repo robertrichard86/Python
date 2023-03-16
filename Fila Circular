@@ -1,0 +1,60 @@
+class FilaCircular:
+    def __init__(self, capacidade):
+        self.capacidade = capacidade
+        self.fila = [None] * capacidade
+        self.inicio = 0
+        self.tamanho = 0
+    
+    def inserir(self, valor):
+        if self.tamanho == self.capacidade:
+            print("A fila está cheia!")
+            return
+        posicao = (self.inicio + self.tamanho) % self.capacidade
+        self.fila[posicao] = valor
+        self.tamanho += 1
+    
+    def remover(self):
+        if self.tamanho == 0:
+            print("A fila está vazia!")
+            return
+        valor = self.fila[self.inicio]
+        self.fila[self.inicio] = None
+        self.inicio = (self.inicio + 1) % self.capacidade
+        self.tamanho -= 1
+        return valor
+    
+    def imprimir(self):
+        for i in range(self.tamanho):
+            posicao = (self.inicio + i) % self.capacidade
+            print(self.fila[posicao], end=' ')
+        print()
+
+# criar uma fila circular com capacidade 5
+fila = FilaCircular(5)
+
+# inserir 5 elementos na fila
+fila.inserir(1)
+fila.inserir(2)
+fila.inserir(3)
+fila.inserir(4)
+fila.inserir(5)
+
+# imprimir os 5 elementos inseridos
+print("Elementos inseridos na fila:")
+fila.imprimir()
+
+# remover 2 elementos da fila
+fila.remover()
+fila.remover()
+
+# imprimir os elementos restantes
+print("Elementos restantes na fila após remoção:")
+fila.imprimir()
+
+# inserir 2 novos elementos na fila
+fila.inserir(6)
+fila.inserir(7)
+
+# imprimir os elementos da fila após a inserção
+print("Elementos na fila após a inserção:")
+fila.imprimir()
