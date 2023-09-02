@@ -1,0 +1,12 @@
+Usando a função format:
+
+numero = float(input("Digite um número: "))
+numero_formatado = "{:.2f}".format(numero)
+print("Número formatado com duas casas decimais:", numero_formatado)
+
+
+Usando f-strings:
+
+numero = float(input("Digite um número: "))
+numero_formatado = f"{numero:.2f}"
+print("Número formatado com duas casas decimais:", numero_formatado)
