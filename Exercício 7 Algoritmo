@@ -1,13 +1,13 @@
-arroz = 4.50
-feijao = 5.80
-acucar = 2.30
-batata = 4.99
-oleo = 12.00
-bolacha_agua_sal = 3.99
-bolacha_maizena = 4.69
-banana = 3.00
-couve_flor = 4.00
-leite_em_po = 14.69
+arroz = float(input("Inserir valor do arroz: R$ "))
+feijao = float(input("Inserir valor do feijão: R$ "))
+acucar = float(input("Inserir valor do açúcar: R$ "))
+batata = float(input("Inserir valor da batata: R$ "))
+oleo = float(input("Inserir valor do óleo: R$ "))
+bolacha_agua_sal = float(input("Inserir valor da bolacha de água e sal: R$ "))
+bolacha_maizena = float(input("Inserir valor da bolacha de maizena: R$ "))
+banana = float(input("Inserir valor da banana: R$ "))
+couve_flor = float(input("Inserir valor da couve-flor: R$ "))
+leite_em_po = float(input("Inserir valor do leite em pó: R$ "))
 
 print("Preço de Cada Item:")
 
@@ -38,6 +38,6 @@ Valor_Total = (5*arroz+3*feijao+2*acucar+3*batata+5*oleo+3*banana+2*couve_flor+2
 print("\nO Valor Total é = R$ {:.2f}".format(Valor_Total))
 
 if Valor_Total <= 150.00:
-    print("Pagamento à vista")
+    print("Pagamento em Dinheiro")
 else:
-    print("Pagamento em até 6x s/ juros no Cartão de Crédito")
+    print("Pagamento em Parcelas com o uso de Cartão")
