@@ -1,0 +1,13 @@
+n = int(input("Digite o número de palavras na frase: "))
+
+palavras = []
+
+i = 0
+while i < n:
+    palavra = input(f"Digite a palavra {i + 1}: ")
+    palavras.append(palavra)
+    i += 1
+
+frase = " ".join(palavras)
+
+print("Frase final:", frase)
