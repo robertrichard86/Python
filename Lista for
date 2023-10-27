@@ -1,0 +1,11 @@
+Lista = [8, 16, 20, -3]
+for i in Lista:
+    print(i)
+    
+número_lista = int(input("\nDigitar número para pesquisa: "))
+for i in Lista:
+    if i == número_lista:
+        print("Número Pesquisado: ", i)
+        break
+else:
+    print("Número Não Encontrado!")
