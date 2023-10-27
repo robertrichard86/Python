@@ -1,0 +1,22 @@
+for i in range(10):
+    print(i)
+    
+print("\n")
+    
+for i in range(3, 8):
+    print(i)
+    
+print("\n")
+    
+for i in range(0, 10, 2):
+    print(i, end=" ")
+    
+print("\n")
+
+lista_gerador = list(range(10, 101, 10))
+for i in lista_gerador:
+    print(i)
+    
+print("\n")
+    
+print(lista_gerador)
