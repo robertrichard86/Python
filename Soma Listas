@@ -1,0 +1,16 @@
+soma = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+números_pares = list(range(0, 20, 2))
+print(números_pares)
+
+print("\n")
+
+números_ímpares = list(range(1, 20, 2))
+print(números_ímpares)
+
+print("\n")
+
+for i in range(10):
+    soma[i] = números_pares[i]+números_ímpares[i]
+    
+print("Soma das duas listas: ", soma)
