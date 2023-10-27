@@ -1,0 +1,16 @@
+Lista = [8, 16, 20, -3]
+
+número_lista = int(input("\nDigitar número para pesquisar: "))
+número_encontrado = False
+k = 0
+
+while k < len(Lista):
+    if Lista[k] == número_lista:
+        número_encontrado = True
+        break
+    k += 1
+    
+if número_encontrado:
+    print(f"{número_lista} achado na posição {k}")
+else:
+    print("Número Não Encontrado!")
