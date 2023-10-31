@@ -23,7 +23,7 @@ tupla3 = tuple(lista0)
 print("Tupla Gerada", tupla3)
 
 print("\nLista Contida em Tupla:")
-tupla4 = (17, 3, -6 [-2, 0, -1])
+tupla4 = (17, 3, -6, [-2, 0, -1])
 print("\nTamanho da Tupla", len(tupla4))
 for j, k in enumerate(tupla4):
     print(f"Elemento de {j} de tupla 4: {k}")
