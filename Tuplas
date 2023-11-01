@@ -1,6 +1,6 @@
 print("Declaração de tuplas sem parênteses - Empacotamento:")
 tupla1 = 1, 2, 3
-print("Tupla1", tupla1)
+print("Tupla1: ", tupla1)
 
 print("\nLaço for para percorrer a tupla:")
 for i in tupla1:
@@ -9,22 +9,22 @@ for i in tupla1:
 print("\nTupla para desempacotar:")
 x , y = -1, 3
 print("x = ", x, "\ny =", y)
-print("\nTrocando variáveis")
+print("\nTrocando variáveis:")
 x , y = y, x
 print("\nValores Trocados: x =", x, "\y =", y)
 
-print("\nTupla Tamanho")
+print("\nTupla Tamanho:")
 tupla2 = ()
 print("Tamanho Tupla1: ", len(tupla1), "Tamanho Tupla2: ", len(tupla2))
 
-print("\nriação de Tupla a partir de Lista:")
+print("\nCriação de Tupla a partir de Lista:")
 lista0 = [8, -9, 10]
 tupla3 = tuple(lista0)
-print("Tupla Gerada", tupla3)
+print("Tupla Gerada: ", tupla3)
 
 print("\nLista Contida em Tupla:")
 tupla4 = (17, 3, -6, [-2, 0, -1])
-print("\nTamanho da Tupla", len(tupla4))
+print("\nTamanho da Tupla: ", len(tupla4))
 for j, k in enumerate(tupla4):
     print(f"Elemento de {j} de tupla 4: {k}")
 print("\nAdicionando Elemento à parte:")
