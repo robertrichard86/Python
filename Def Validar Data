@@ -1,0 +1,19 @@
+def valida_data(ano_nascimento, mínimo, máximo):
+    while True:
+        if ano_nascimento < mínimo or ano_nascimento > máximo:
+            print(f"Criança com idade não permitida para a matrícula: Ano do nascimento deve ser maior {mínimo} e menor {máximo}")
+            return False
+        else:
+            return True
+        
+print("SERVIÇO DE MATRÍCULA NA ESCOLA:")
+nome = input("Entrar com o nome da criança = ")
+mín = int(input("Entrar com o ano limite mínimo da matrícula = "))
+máx = int(input("Entrar com o ano limite máximo da matrícula = "))
+ano = int(input("Entre com o ano do nascimento = "))
+
+valida_matrícula = valida_data(ano, mín, máx)
+if valida_matrícula:
+    print("A criança", nome, "teve a matrícula efetuada")
+else:
+    print("A criança", nome, "não teve a matrícula efetuada porque está fora da idade permitida ")
