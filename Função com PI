@@ -1,0 +1,8 @@
+PI = 3.1416
+variável_global = "PI"
+
+def área_circunferência(raio):
+    print("uso da variável global = ", variável_global, " = ", PI)
+    return PI*pow(raio, 2) 
+
+print("A circunferência de raio 3 tem área = ", área_circunferência(3))
