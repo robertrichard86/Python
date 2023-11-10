@@ -1,0 +1,8 @@
+def soma_subtrai(a, b):
+    soma = a + b
+    subtração = a - b
+    return soma, subtração
+
+resultado_soma, resultado_subtração = soma_subtrai(11, 22)
+print("resultado da soma = ", resultado_soma)
+print("resultado da subtração = ", resultado_subtração)
