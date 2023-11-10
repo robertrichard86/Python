@@ -1,0 +1,22 @@
+def múltiplas_operações(a, b, operação_aritmética):
+    return operação_aritmética(a, b)
+
+def soma(c, d):
+    return c + d
+
+def subtração(d, e):
+    return d - e
+
+def multiplicação(f, g):
+    return f * g
+
+def divisão(h, i):
+    return h/i
+
+x = 2.14
+y = -9.33
+
+print(f"operação de soma {x} + {y} = ", múltiplas_operações(x, y, soma))
+print(f"operação de subtração {x} - {y} = ", múltiplas_operações(x, y, subtração))
+print(f"operação de multiplicação {x} * {y} = ", múltiplas_operações(x, y, multiplicação))
+print(f"operação de divisão {x} / {y} = ", múltiplas_operações(x, y, divisão))
