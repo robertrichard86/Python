@@ -1,0 +1,18 @@
+variável_global = 6
+
+def multiplica_seis(argumento):
+    print("uso da variável global = ", variável_global)
+    return variável_global*argumento
+
+def divide_sete():
+    variável_local = 7
+    print("variável local = ", variável_local)
+    global variável_global
+    variável_global = 49
+    print("mudando valor da variável global agora", variável_global)
+    return variável_global/variável_local
+
+print("resultado de 6*3 = ", multiplica_seis(3))
+print("uso da variável global antes da 2ª função= ", variável_global)
+print("resultado 49/7 = ", divide_sete())
+print("uso da variável global antes da 2ª função= ", variável_global)
