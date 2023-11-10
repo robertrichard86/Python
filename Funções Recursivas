@@ -1,0 +1,10 @@
+def testa_if(a, b):
+    print("acesso ao if_else")
+    if a > b:
+        print("a é maior")
+        testa_if(3, 4)
+        print("b é maior")
+        testa_if(0, 0)
+        print("a e b iguais")
+        
+testa_if(6, 5)
