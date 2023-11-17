@@ -1,0 +1,39 @@
+import math
+
+def comprehensions(i):
+    if i == "Lista":
+        return[x for x in range(10)]
+    if i == "Lista_dobro":
+        return[x*2 for x in [-3, 6.6, 0.7]]
+    if i == "Lista_tupla":
+        return[(x, x*3) for x in [7, 14, 21]]
+    if i == "Lista_maiúsculas":
+        return[s.upper() for s in "aeiou"]
+    if i == "Lista_pares":
+        return[x for x in range(10) if x%2 == 0]
+    if i == "Lista_raiz":
+        return[math.sqrt(x) for x in range(4, 10)]
+
+print("\nLIST COMPREHENSIONS")
+Lista = comprehensions("Lista")
+print(Lista)
+
+print("\nLIST COMPREHENSIONS")
+Lista_dobro = comprehensions("Lista_dobro")
+print(Lista_dobro)
+
+print("\nLIST COMPREHENSIONS")
+Lista_tupla = comprehensions("Lista_tupla")
+print(Lista_tupla)
+
+print("\nLIST COMPREHENSIONS")
+Lista_maiúsculas = comprehensions("Lista_maiúsculas")
+print(Lista_maiúsculas)
+
+print("\nLIST COMPREHENSIONS")
+Lista_pares = comprehensions("Lista_pares")
+print(Lista_pares)
+
+print("\nLIST COMPREHENSIONS")
+Lista_raiz = comprehensions("Lista_raiz")
+print(Lista_raiz)
