@@ -1,0 +1,31 @@
+import random
+
+print("FUNÇÃO QUE RETORNA NÚMEROS ALEATÓRIOS DENTRO DE UMA FAIXA DETERMINADA")
+
+def retorna_aleatórioint(x, y):
+    return random.randint(x, y)
+        
+a = int(input("Entrar com o valor inicial da faixa de número aleatório: "))
+b = int(input("Entrar com o valor final da faixa de número aleatório: "))
+print("Número aleatório: ", retorna_aleatórioint(a, b))
+
+print("\nFUNÇÃO QUE RETORNA NÚMEROS ALEATÓRIOS DE PONTOS FLUTUANTES")
+def retorna_aleatóriofloat():
+    return random.random()
+
+print("Número aleatório de ponto flutuante: ", retorna_aleatóriofloat())
+
+def retorna_floatfaixa(z, w):
+    return random.uniform(z, w)
+
+c = int(input("Entrar com o valor inicial inteiro da faixa de número aleatório de ponto flutuante: "))
+d = int(input("Entrar com o valor final inteiro da faixa de número aleatório de ponto flutuante: "))
+print(f"\nNúmero aleatório de ponto flutuante dentro da faixa {c} e {d}: ", retorna_floatfaixa(c, d))
+
+print("\nFUNÇÃO QUE RETORNA ELEMENTO ALEATÓRIO DE UMA LISTA")
+def retorna_aleatóriolista(i, n):
+    return random.sample(i, n)
+
+lista_0 = ["João", "Maria", "José", "Pedro", "Antônio"]
+print("elementos retornados aleatoriamente da lista", retorna_aleatóriolista(lista_0, 1))
+print("elementos retornados aleatoriamente da lista", retorna_aleatóriolista(range(-11, 11), 3))
