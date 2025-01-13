@@ -1,0 +1,29 @@
+import time
+
+A = [[2, -1, 3], [0, 4, 6], [-6, 10, -5]]
+B = [[4, 7, -8], [9, 3, 5], [1, -1, 2]]
+C = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+print("MATRIZ A:")
+for linha in A:
+    print(linha)
+
+print("MATRIZ B:")
+for linha in B:
+    print(linha)
+
+tempo_inicial = time.time()
+
+for i in range(3):
+    for j in range(3):
+        C[i][j] = 0
+        for k in range(3):
+            C[i][j] += A[i][k] * B[k][j]
+
+tempo_final = time.time()
+
+print("PRODUTO MATRICIAL:")
+for linha in C:
+    print(linha)
+
+print("Tempo de execução = ", tempo_final - tempo_inicial)
