@@ -1,0 +1,26 @@
+import time
+
+L = [1, "Goiânia", "Goiás", 2, "Bonito", "Mato Grosso", 3, "Carangola", "Minas Gerais", 4, "Peruíbe", "São Paulo", 20, "Serra", "Espírito Santo"]
+n = len(L)
+
+print("Dimensão da lista L = ", n)
+
+def busca_linear(x):
+    for i in range(n):
+        if L[i] == x:
+            return i
+    return None
+
+tempo_inicial = time.time()
+
+print("Índice da chave (5) = ", busca_linear(5))
+print("Índice da chave (1) = ", busca_linear(1))
+print("Índice da chave (4) = ", busca_linear(4))
+print("Índice da chave (3) = ", busca_linear(3))
+print("Índice da chave (2) = ", busca_linear(2))
+print("Índice da chave (0) = ", busca_linear(0))
+print("Índice da chave (20) = ", busca_linear(20))
+
+tempo_final = time.time()
+
+print("Tempo de execução = ", tempo_final - tempo_inicial)
