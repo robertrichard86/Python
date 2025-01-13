@@ -1,0 +1,38 @@
+import time
+
+L = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+n = len(L)
+
+print("Dimensão da lista L = ", n)
+
+def busca_binaria(x):
+    posicao_inferior = 0
+    posicao_superior = n - 1
+
+    while posicao_inferior <= posicao_superior:
+        meio = (posicao_inferior + posicao_superior) // 2
+        if L[meio] == x:
+            return meio
+        elif L[meio] < x:
+            posicao_inferior = meio + 1
+        else:
+            posicao_superior = meio - 1
+    return None
+
+tempo_inicial = time.time()
+
+print("Índice da chave (5) = ", busca_binaria(5))
+print("Índice da chave (1) = ", busca_binaria(1))
+print("Índice da chave (4) = ", busca_binaria(4))
+print("Índice da chave (3) = ", busca_binaria(3))
+print("Índice da chave (2) = ", busca_binaria(2))
+print("Índice da chave (0) = ", busca_binaria(0))
+print("Índice da chave (6) = ", busca_binaria(6))
+print("Índice da chave (7) = ", busca_binaria(7))
+print("Índice da chave (8) = ", busca_binaria(8))
+print("Índice da chave (9) = ", busca_binaria(9))
+print("Índice da chave (10) = ", busca_binaria(10))
+
+tempo_final = time.time()
+
+print("Tempo de execução = ", tempo_final - tempo_inicial)
