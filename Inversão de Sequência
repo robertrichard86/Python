@@ -1,0 +1,17 @@
+import time
+
+n = 11
+S = [x for x in range(n)]
+print("Vetor S = ", S)
+
+tempo_inicial = time.time()
+
+for i in range(0, int(n/2)):
+    temporario = S[i]
+    S[i] = S[(n-1) - i]
+    S[(n-1) - i] = temporario
+
+tempo_final = time.time()
+
+print("Vetor S invertido = ", S)
+print("Tempo de execução = ", tempo_final - tempo_inicial)
