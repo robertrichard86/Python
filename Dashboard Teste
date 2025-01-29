@@ -1,0 +1,78 @@
+import dash
+from dash import dcc, html, Input, Output
+import pandas as pd
+import plotly.express as px
+
+# Dados fictícios
+data = {
+    "Produto": ["Produto A", "Produto B", "Produto C", "Produto D", "Produto E"],
+    "Vendas": [500, 300, 400, 600, 350],
+    "Lucro": [200, 120, 150, 300, 130],
+    "Categoria": ["Eletrônicos", "Moda", "Moda", "Eletrônicos", "Esportes"],
+}
+df = pd.DataFrame(data)
+
+# Inicialização do app Dash
+app = dash.Dash(__name__)
+app.title = "Dashboard Interativo"
+
+# Layout do dashboard
+app.layout = html.Div([
+    html.H1("Dashboard de Vendas", style={"textAlign": "center", "color": "#333"}),
+
+    # Dropdown para selecionar a categoria
+    html.Div([
+        html.Label("Selecione a Categoria:", style={"fontWeight": "bold"}),
+        dcc.Dropdown(
+            id="dropdown_categoria",
+            options=[{"label": cat, "value": cat} for cat in df["Categoria"].unique()],
+            value="Eletrônicos",
+            clearable=False,
+            style={"width": "50%"},
+        ),
+    ], style={"padding": "10px"}),
+
+    # Gráfico de barras
+    dcc.Graph(id="grafico_barras"),
+
+    # Gráfico de pizza
+    dcc.Graph(id="grafico_pizza"),
+], style={"fontFamily": "Arial, sans-serif", "padding": "20px"})
+
+# Callback para atualizar os gráficos
+@app.callback(
+    [Output("grafico_barras", "figure"), Output("grafico_pizza", "figure")],
+    [Input("dropdown_categoria", "value")]
+)
+def update_graphs(categoria):
+    # Filtrar os dados pela categoria selecionada
+    df_filtrado = df[df["Categoria"] == categoria]
+
+    # Gráfico de barras
+    fig_barras = px.bar(
+        df_filtrado,
+        x="Produto",
+        y="Vendas",
+        color="Produto",
+        title=f"Vendas por Produto - {categoria}",
+        labels={"Vendas": "Quantidade de Vendas", "Produto": "Produtos"},
+    )
+    fig_barras.update_layout(
+        title_font_size=20, title_x=0.5, template="plotly_white", showlegend=False
+    )
+
+    # Gráfico de pizza
+    fig_pizza = px.pie(
+        df_filtrado,
+        names="Produto",
+        values="Lucro",
+        title=f"Distribuição de Lucro - {categoria}",
+        hole=0.4,
+    )
+    fig_pizza.update_layout(title_font_size=20, title_x=0.5, template="plotly_white")
+
+    return fig_barras, fig_pizza
+
+# Rodar o app
+if __name__ == "__main__":
+    app.run_server(debug=True)
