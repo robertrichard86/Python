@@ -1,0 +1,74 @@
+import pandas as pd
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from adjustText import adjust_text  # Biblioteca para ajustar rótulos
+import os
+
+# Caminho para o arquivo
+file_path = r'C:\Users\USER\Desktop\COVID-19 Global Statistics Dataset.csv'
+
+# Verificar se o arquivo existe
+if not os.path.exists(file_path):
+    print(f"Erro: Arquivo não encontrado em {file_path}")
+else:
+    # Carregar o dataset
+    df = pd.read_csv(file_path)
+
+    # Função para remover vírgulas e converter para float
+    def clean_and_convert(value):
+        if isinstance(value, str):
+            return float(value.replace(',', ''))
+        return float(value)
+
+    # Aplicar a função às colunas relevantes
+    df['Total Cases'] = df['Total Cases'].apply(clean_and_convert)
+    df['Total Deaths'] = df['Total Deaths'].apply(clean_and_convert)
+    df['Total Tests'] = df['Total Tests'].apply(clean_and_convert)
+    df['Population'] = df['Population'].apply(clean_and_convert)
+
+    # Selecionar colunas relevantes
+    features = ['Total Cases', 'Total Deaths', 'Total Tests', 'Population']
+    df_selected = df[features].dropna()
+
+    # Normalizar os dados
+    scaler = StandardScaler()
+    df_normalized = scaler.fit_transform(df_selected)
+
+    # Aplicar PCA
+    pca = PCA(n_components=2)
+    principal_components = pca.fit_transform(df_normalized)
+    principal_df = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
+
+    # Adicionar nomes dos países ao DataFrame
+    principal_df['Country'] = df.loc[df_selected.index, 'Country']
+
+    # Aplicar K-Means para criar clusters
+    n_clusters = 5  # Número de clusters (pode ajustar conforme necessário)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+    principal_df['Cluster'] = kmeans.fit_predict(df_normalized)
+
+    # Plotar o gráfico de dispersão com cores por cluster
+    plt.figure(figsize=(14, 10))
+    scatter = plt.scatter(principal_df['PC1'], principal_df['PC2'], c=principal_df['Cluster'], cmap='viridis', alpha=0.7, s=100)
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.title('PCA - Agrupamento de Países com Base em Dados de COVID-19')
+    plt.grid()
+
+    # Adicionar rótulos dos países
+    texts = []
+    countries_to_annotate = ['Brazil', 'USA', 'India', 'Germany', 'France', 'Italy', 'UK', 'Russia', 'China', 'Japan', 'S. Korea']
+    for i, country in enumerate(principal_df['Country']):
+        if country in countries_to_annotate:
+            texts.append(plt.text(principal_df['PC1'][i], principal_df['PC2'][i], country, fontsize=9, color='red'))
+
+    # Ajustar rótulos para evitar sobreposição
+    adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red', lw=0.35))
+
+    # Adicionar legenda dos clusters
+    legend = plt.legend(*scatter.legend_elements(), title="Clusters", loc="upper right")
+    plt.gca().add_artist(legend)
+
+    plt.show()
