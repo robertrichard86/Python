@@ -1,0 +1,161 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+
+# Caminho completo para o arquivo no desktop
+caminho_arquivo = r'C:\Users\USER\Desktop\Corinthians e Santos.csv'
+
+# Tentar carregar o arquivo com diferentes codificações
+codificacoes = ['utf-8', 'latin1', 'ISO-8859-1', 'cp1252']
+
+for codificacao in codificacoes:
+    try:
+        data = pd.read_csv(caminho_arquivo, encoding=codificacao)
+        print(f"Arquivo carregado com sucesso usando a codificação: {codificacao}")
+        break
+    except UnicodeDecodeError:
+        print(f"Falha ao carregar com a codificação: {codificacao}")
+        continue
+else:
+    raise ValueError("Não foi possível carregar o arquivo com nenhuma das codificações testadas.")
+
+# Verificar as colunas disponíveis
+print("Colunas disponíveis no arquivo CSV:")
+print(data.columns)
+
+# Criar uma coluna binária para classificação
+# Vamos considerar que o time com maior aproveitamento tem mais chances de passar
+data['PASSOU'] = np.where(data['APROVEITAMENTO'] > data['APROVEITAMENTO'].mean(), 1, 0)
+
+# Selecionar colunas numéricas relevantes para treinamento
+X = data[['APROVEITAMENTO', 'PONTOS CASA OU FORA (MÉDIA)', 'SALDO DE GOLS', 'CONFRONTO DIRETO', 'DOIS CONFRONTOS DIRETOS RECENTES']]
+y = data['PASSOU']  # Usando a nova coluna binária como variável alvo
+
+# Dividir os dados em treino e teste
+# Como temos apenas 2 linhas, não faz sentido dividir em treino e teste. Vamos usar todos os dados para treino.
+X_train, X_test, y_train, y_test = X, X, y, y
+
+# Treinar o modelo Random Forest
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+rf_predictions = rf_model.predict(X_test)
+
+# Avaliar o modelo
+rf_accuracy = accuracy_score(y_test, rf_predictions)
+print(f'Random Forest Accuracy: {rf_accuracy:.2f}')
+
+# Definir a variável 'times' antes de usá-la
+times = data['TIMES']
+
+# Calcular as probabilidades de classificação para cada time
+rf_probs = rf_model.predict_proba(X_test)[:, 1]  # Probabilidade de passar (classe 1)
+
+# Criar um DataFrame para visualizar as probabilidades
+probabilidades = pd.DataFrame({
+    'Times': times,
+    'Probabilidade Random Forest': rf_probs * 100  # Convertendo para percentual
+})
+
+print("Probabilidades de passar:")
+print(probabilidades)
+
+# Gerar gráfico de colunas com as chances de passar (em percentual)
+plt.figure(figsize=(10, 6))
+bar_width = 0.35
+index = np.arange(len(times))
+
+# Barras para cada time com cores específicas
+cores = ['black', 'gray']  # Corinthians em preto, Santos em cinza
+plt.bar(index, probabilidades['Probabilidade Random Forest'], bar_width, color=cores, label=times)
+
+plt.title('Chances de Passar na Semifinal (Percentual)')
+plt.xlabel('Times')
+plt.ylabel('Probabilidade de Passar (%)')
+plt.xticks(index, times)  # Posicionando os rótulos no centro das barras
+plt.legend()
+plt.show()
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+
+# Caminho completo para o arquivo no desktop
+caminho_arquivo = r'C:\Users\USER\Desktop\Palmeiras e São Paulo.csv'
+
+# Tentar carregar o arquivo com diferentes codificações
+codificacoes = ['utf-8', 'latin1', 'ISO-8859-1', 'cp1252']
+
+for codificacao in codificacoes:
+    try:
+        data = pd.read_csv(caminho_arquivo, encoding=codificacao)
+        print(f"Arquivo carregado com sucesso usando a codificação: {codificacao}")
+        break
+    except UnicodeDecodeError:
+        print(f"Falha ao carregar com a codificação: {codificacao}")
+        continue
+else:
+    raise ValueError("Não foi possível carregar o arquivo com nenhuma das codificações testadas.")
+
+# Verificar as colunas disponíveis
+print("Colunas disponíveis no arquivo CSV:")
+print(data.columns)
+
+# Criar uma coluna binária para classificação
+# Vamos considerar que o time com maior aproveitamento tem mais chances de passar
+data['PASSOU'] = np.where(data['APROVEITAMENTO'] > data['APROVEITAMENTO'].mean(), 1, 0)
+
+# Selecionar colunas numéricas relevantes para treinamento
+X = data[['APROVEITAMENTO', 'PONTOS CASA OU FORA (MÉDIA)', 'SALDO DE GOLS', 'CONFRONTO DIRETO', 'DOIS CONFRONTOS DIRETOS RECENTES']]
+y = data['PASSOU']  # Usando a nova coluna binária como variável alvo
+
+# Dividir os dados em treino e teste
+# Como temos apenas 2 linhas, não faz sentido dividir em treino e teste. Vamos usar todos os dados para treino.
+X_train, X_test, y_train, y_test = X, X, y, y
+
+# Treinar o modelo Random Forest
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+rf_predictions = rf_model.predict(X_test)
+
+# Avaliar o modelo
+rf_accuracy = accuracy_score(y_test, rf_predictions)
+print(f'Random Forest Accuracy: {rf_accuracy:.2f}')
+
+# Definir a variável 'times' antes de usá-la
+times = data['TIMES']
+
+# Calcular as probabilidades de classificação para cada time
+rf_probs = rf_model.predict_proba(X_test)[:, 1]  # Probabilidade de passar (classe 1)
+
+# Criar um DataFrame para visualizar as probabilidades
+probabilidades = pd.DataFrame({
+    'Times': times,
+    'Probabilidade Random Forest': rf_probs * 100  # Convertendo para percentual
+})
+
+print("Probabilidades de passar:")
+print(probabilidades)
+
+# Gerar gráfico de colunas com as chances de passar (em percentual)
+plt.figure(figsize=(10, 6))
+bar_width = 0.35
+index = np.arange(len(times))
+
+# Barras para cada time com cores específicas
+cores = ['green', 'red']
+plt.bar(index, probabilidades['Probabilidade Random Forest'], bar_width, color=cores, label=times)
+
+plt.title('Chances de Passar na Semifinal (Percentual)')
+plt.xlabel('Times')
+plt.ylabel('Probabilidade de Passar (%)')
+plt.xticks(index, times)  # Posicionando os rótulos no centro das barras
+plt.legend()
+plt.show()
