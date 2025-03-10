@@ -1,0 +1,56 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt  # Importando matplotlib para o gráfico
+
+# 1. Carregar os dados do MySQL para um DataFrame
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='scripts123405',
+    database='Northwind'
+)
+
+query = """
+SELECT p.unitPrice, od.quantity, c.categoryName, cu.country
+FROM OrderDetail od
+JOIN Product p ON od.productId = p.productId
+JOIN Category c ON p.categoryId = c.categoryId
+JOIN SalesOrder so ON od.orderId = so.orderId
+JOIN Customer cu ON so.custId = cu.custId
+"""
+
+df = pd.read_sql(query, conn)
+
+# 2. Aplicar One-Hot Encoding nas variáveis categóricas
+df = pd.get_dummies(df, columns=['categoryName', 'country'])
+
+# 3. Normalizar as variáveis numéricas
+scaler = StandardScaler()
+df[['unitPrice', 'quantity']] = scaler.fit_transform(df[['unitPrice', 'quantity']])
+
+# 4. Aplicar K-Means
+kmeans = KMeans(n_clusters=3, random_state=42)
+df['cluster'] = kmeans.fit_predict(df)
+
+# 5. Visualizar os clusters
+print(df.head())
+
+# 6. Plotar o gráfico de dispersão
+plt.figure(figsize=(10, 6))  # Define o tamanho do gráfico
+
+# Cria um scatter plot (gráfico de dispersão)
+scatter = plt.scatter(df['unitPrice'], df['quantity'], c=df['cluster'], cmap='viridis', s=50, alpha=0.6)
+
+# Adiciona rótulos e título
+plt.title('Clusters de Produtos por Preço Unitário e Quantidade', fontsize=16)
+plt.xlabel('Preço Unitário (normalizado)', fontsize=12)
+plt.ylabel('Quantidade (normalizada)', fontsize=12)
+
+# Adiciona uma legenda para os clusters
+plt.colorbar(scatter, label='Cluster')
+
+# Mostra o gráfico
+plt.show()
