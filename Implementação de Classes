@@ -1,0 +1,212 @@
+# 1. Classe Pessoa
+class Pessoa:
+    def __init__(self, nome, idade):
+        if not isinstance(nome, str) or nome.strip() == "":
+            raise ValueError("Nome deve ser uma string não vazia")
+        if not isinstance(idade, int) or idade <= 0:
+            raise ValueError("Idade deve ser um número inteiro positivo")
+
+        self.nome = nome
+        self.idade = idade
+
+    def cumprimentar(self):
+        return f"Olá, meu nome é {self.nome}!"
+
+    def __str__(self):
+        return f"Pessoa: {self.nome}, {self.idade} anos"
+
+
+# 2. Classe Aluno (herda de Pessoa)
+class Aluno(Pessoa):
+    def __init__(self, nome, idade, matricula, curso):
+        super().__init__(nome, idade)
+
+        if not isinstance(matricula, str) or len(matricula) != 6 or not matricula.isalnum():
+            raise ValueError("Matrícula deve ter exatamente 6 caracteres alfanuméricos")
+        if not isinstance(curso, str) or curso.strip() == "":
+            raise ValueError("Curso deve ser uma string não vazia")
+
+        self.matricula = matricula
+        self.curso = curso
+        self.notas = []
+
+    def adicionar_nota(self, nota):
+        if not isinstance(nota, (int, float)) or nota < 0 or nota > 10:
+            raise ValueError("Nota deve ser um número entre 0 e 10")
+        self.notas.append(nota)
+
+    def calcular_media(self):
+        if not self.notas:
+            return 0
+        return sum(self.notas) / len(self.notas)
+
+    def estudar(self):
+        return f"{self.nome} está estudando para o curso de {self.curso}"
+
+    def __str__(self):
+        return f"Aluno: {self.nome}, {self.idade} anos, Matrícula: {self.matricula}, Curso: {self.curso}"
+
+
+# 3. Classe ContaBancaria
+class ContaBancaria:
+    def __init__(self, titular):
+        if not isinstance(titular, str) or titular.strip() == "":
+            raise ValueError("Titular deve ser uma string não vazia")
+
+        self._saldo = 0.0
+        self._titular = titular
+        self._limite_saque = 1000.0
+
+    def depositar(self, valor):
+        if not isinstance(valor, (int, float)) or valor <= 0:
+            raise ValueError("Valor de depósito deve ser positivo")
+        self._saldo += valor
+        return self._saldo
+
+    def sacar(self, valor):
+        if not isinstance(valor, (int, float)) or valor <= 0:
+            raise ValueError("Valor de saque deve ser positivo")
+        if valor > self._saldo:
+            raise ValueError("Saldo insuficiente")
+        if valor > self._limite_saque:
+            raise ValueError(f"Valor excede o limite de saque de {self._limite_saque}")
+
+        self._saldo -= valor
+        return self._saldo
+
+    def extrato(self):
+        return f"Titular: {self._titular}, Saldo: R${self._saldo:.2f}"
+
+    def alterar_limite(self, novo_limite):
+        if not isinstance(novo_limite, (int, float)) or novo_limite <= 0:
+            raise ValueError("Novo limite deve ser um valor positivo")
+        self._limite_saque = novo_limite
+        return self._limite_saque
+
+
+# 4. Modelagem da Livraria Virtual
+class Autor:
+    def __init__(self, nome, sobrenome, idade, sobre):
+        if not isinstance(nome, str) or nome.strip() == "":
+            raise ValueError("Nome deve ser uma string não vazia")
+        if not isinstance(sobrenome, str) or sobrenome.strip() == "":
+            raise ValueError("Sobrenome deve ser uma string não vazia")
+        if not isinstance(idade, int) or idade <= 0:
+            raise ValueError("Idade deve ser um número inteiro positivo")
+
+        self.nome = nome
+        self.sobrenome = sobrenome
+        self.idade = idade
+        self.sobre = sobre
+
+    def nome_completo(self):
+        return f"{self.nome} {self.sobrenome}"
+
+    def __str__(self):
+        return f"Autor: {self.nome_completo()}, {self.idade} anos"
+
+
+class Livro:
+    def __init__(self, titulo, autor, genero, preco):
+        if not isinstance(titulo, str) or titulo.strip() == "":
+            raise ValueError("Título deve ser uma string não vazia")
+        if not isinstance(autor, Autor):
+            raise ValueError("Autor deve ser uma instância da classe Autor")
+        if not isinstance(genero, str) or genero.strip() == "":
+            raise ValueError("Gênero deve ser uma string não vazia")
+        if not isinstance(preco, (int, float)) or preco <= 0:
+            raise ValueError("Preço deve ser um número positivo")
+
+        self.titulo = titulo
+        self.autor = autor
+        self.genero = genero
+        self.preco = preco
+
+    def __str__(self):
+        return f"Livro: {self.titulo} ({self.genero}) por {self.autor.nome_completo()} - R${self.preco:.2f}"
+
+
+class CarrinhoCompras:
+    def __init__(self):
+        self.livros = []
+
+    def adicionar_livro(self, livro):
+        if not isinstance(livro, Livro):
+            raise ValueError("Item deve ser uma instância da classe Livro")
+        self.livros.append(livro)
+
+    def remover_livro(self, livro):
+        if livro in self.livros:
+            self.livros.remove(livro)
+
+    def calcular_total(self):
+        return sum(livro.preco for livro in self.livros)
+
+    def listar_livros_por_genero(self):
+        generos = {}
+        for livro in self.livros:
+            if livro.genero not in generos:
+                generos[livro.genero] = []
+            generos[livro.genero].append(livro)
+        return generos
+
+    def __str__(self):
+        return f"Carrinho com {len(self.livros)} livros - Total: R${self.calcular_total():.2f}"
+
+
+# Exemplo de uso de todas as classes juntas
+if __name__ == "__main__":
+    print("=== Exemplo de Uso das Classes ===")
+
+    # 1. Pessoa
+    print("\n1. Exemplo Pessoa:")
+    pessoa = Pessoa("Ana", 28)
+    print(pessoa.cumprimentar())
+    print(pessoa)
+
+    # 2. Aluno
+    print("\n2. Exemplo Aluno:")
+    try:
+        aluno = Aluno("Pedro", 22, "XYZ789", "Medicina")
+        aluno.adicionar_nota(9.5)
+        aluno.adicionar_nota(8.0)
+        print(aluno.estudar())
+        print(f"Média: {aluno.calcular_media():.1f}")
+        print(aluno)
+    except ValueError as e:
+        print(f"Erro: {e}")
+
+    # 3. Conta Bancária
+    print("\n3. Exemplo Conta Bancária:")
+    conta = ContaBancaria("Maria Oliveira")
+    conta.depositar(1500)
+    try:
+        conta.sacar(300)
+        print(conta.extrato())
+        conta.alterar_limite(2000)
+    except ValueError as e:
+        print(f"Erro: {e}")
+
+    # 4. Livraria Virtual
+    print("\n4. Exemplo Livraria Virtual:")
+    autor1 = Autor("Machado", "de Assis", 69, "Grande escritor brasileiro")
+    livro1 = Livro("Dom Casmurro", autor1, "Romance", 35.90)
+    livro2 = Livro("Memórias Póstumas de Brás Cubas", autor1, "Romance", 42.50)
+
+    autor2 = Autor("Graciliano", "Ramos", 60, "Escritor modernista brasileiro")
+    livro3 = Livro("Vidas Secas", autor2, "Literatura Brasileira", 39.90)
+
+    carrinho = CarrinhoCompras()
+    carrinho.adicionar_livro(livro1)
+    carrinho.adicionar_livro(livro2)
+    carrinho.adicionar_livro(livro3)
+
+    print("\nLivros no carrinho:")
+    for livro in carrinho.livros:
+        print(livro)
+
+    print(f"\nTotal do carrinho: R${carrinho.calcular_total():.2f}")
+
+    print("\nLivros por gênero:")
+    for genero, livros in carrinho.listar_livros_por_genero().items():
+        print(f"{genero}: {len(livros)} livros")
