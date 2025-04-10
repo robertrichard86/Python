@@ -9,19 +9,19 @@ import matplotlib.pyplot as plt
 conhecidas = [
     # Amostras Azuis (variando tons)
     [0, 153, 251, 0], [10, 140, 240, 0], [20, 160, 245, 0],
-    
+
     # Amostras Laranjas (variando tons)
     [255, 126, 84, 1], [245, 120, 80, 1], [250, 130, 90, 1],
-    
+
     # Amostras Vermelhas (variando tons)
     [254, 61, 60, 2], [240, 50, 50, 2], [245, 70, 65, 2],
-    
+
     # Amostras Verdes (variando tons)
     [0, 202, 38, 3], [10, 190, 45, 3], [5, 210, 30, 3],
-    
+
     # Amostras Amarelas (variando tons)
     [254, 255, 0, 4], [240, 245, 10, 4], [250, 250, 5, 4],
-    
+
     # Amostras Brancas (variando tons)
     [243, 251, 245, 5], [240, 248, 242, 5], [245, 250, 247, 5]
 ]
@@ -56,10 +56,13 @@ knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
 knn.fit(X, y)
 
 def processar_imagem(imagem_path):
+    print("\nIniciando processamento da imagem...")
     img = cv2.imread(imagem_path)
     if img is None:
         print("Erro: Imagem não carregada. Verifique o caminho ou o nome do arquivo!")
         return
+
+    print("Imagem carregada com sucesso. Dimensões:", img.shape)
 
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img_blur = cv2.medianBlur(img_rgb, 7)
@@ -74,14 +77,16 @@ def processar_imagem(imagem_path):
         return
 
     circles = np.uint16(np.around(circles))
+    print(f"Detectados {len(circles[0])} círculos")
+
     contagem = Counter()
     img_resultado = img_rgb.copy()
 
-    for (x, y, r) in circles[0]:
+    for i, (x, y, r) in enumerate(circles[0]):
         try:
             x, y, r = int(x), int(y), int(r)
             r = max(15, min(r, 100))
-            
+
             height, width = img.shape[:2]
             y_min = max(0, y - r)
             y_max = min(height, y + r)
@@ -89,52 +94,60 @@ def processar_imagem(imagem_path):
             x_max = min(width, x + r)
 
             if (y_max - y_min) <= 5 or (x_max - x_min) <= 5:
+                print(f"Circulo {i} muito pequeno - ignorando")
                 continue
 
             roi = img_blur[y_min:y_max, x_min:x_max]
             if roi.size == 0:
+                print(f"Circulo {i} com ROI vazio - ignorando")
                 continue
 
             centro = roi[roi.shape[0]//2-2:roi.shape[0]//2+3, 
                      roi.shape[1]//2-2:roi.shape[1]//2+3]
             cor_media = np.mean(centro, axis=(0, 1)).astype(int)
-            
+
             cor_predita = knn.predict([cor_media])[0]
             nome_cor = cores[cor_predita]
             contagem[nome_cor] += 1
+            print(f"Circulo {i} classificado como {nome_cor}")
 
-            # Desenhar texto com fundo branco (mantido igual)
+            # Desenhar texto com fundo branco
             text_size = cv2.getTextSize(nome_cor, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 1)[0]
             text_x = x - text_size[0] // 2
             text_y = y + text_size[1] // 2
-            
+
             cv2.rectangle(img_resultado, 
                          (text_x - 3, text_y - text_size[1] - 3),
                          (text_x + text_size[0] + 3, text_y + 3),
                          (255, 255, 255), -1)
-            
+
             cv2.putText(img_resultado, nome_cor, (text_x, text_y),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
-            
+
         except Exception as e:
+            print(f"Erro ao processar circulo {i}: {str(e)}")
             continue
 
-    # Mostrar imagem resultante (mantido igual)
+    # Mostrar imagem resultante
     plt.figure(figsize=(14, 10))
     plt.imshow(img_resultado)
     plt.axis('off')
     plt.title('Resultado Final - Classificação de Cores', pad=20)
     plt.show()
 
-    # RESUMO SIMPLIFICADO NO CONSOLE (como você quer)
-    print("\n=== CONTAGEM DAS CORES ===")
-    print(f"{'COR':<10} | {'QUANTIDADE':>10}")
-    print("-" * 23)
-    for cor, qtd in sorted(contagem.items()):
-        print(f"{cor:<10} | {qtd:>10}")
-    print("-" * 23)
-    print(f"{'TOTAL':<10} | {sum(contagem.values()):>10}")
+    # RESUMO NO CONSOLE (agora com mais garantia de execução)
+    if contagem:
+        print("\n=== CONTAGEM DAS CORES ===")
+        print(f"{'COR':<10} | {'QUANTIDADE':>10}")
+        print("-" * 23)
+        for cor, qtd in sorted(contagem.items()):
+            print(f"{cor:<10} | {qtd:>10}")
+        print("-" * 23)
+        print(f"{'TOTAL':<10} | {sum(contagem.values()):>10}")
+    else:
+        print("Nenhuma cor foi contabilizada - verifique os parâmetros de detecção")
 
 # Executar
-print("RESULTADO FINAL")
+print("\nIniciando análise da imagem...")
 processar_imagem("bolinhas_coloridas.png")
+print("\nAnálise concluída!")
