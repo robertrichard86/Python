@@ -1,0 +1,163 @@
+texto = """
+Iniciando análise da imagem...
+
+Iniciando processamento da imagem...
+Imagem carregada com sucesso. Dimensões: (476, 632, 3)
+Detectados 130 círculos
+Circulo 0 classificado como Branco
+Circulo 1 classificado como Vermelho
+Circulo 2 classificado como Vermelho
+Circulo 3 classificado como Laranja
+Circulo 4 classificado como Vermelho
+Circulo 5 classificado como Verde
+Circulo 6 classificado como Vermelho
+Circulo 7 classificado como Azul
+Circulo 8 classificado como Amarelo
+Circulo 9 classificado como Branco
+Circulo 10 classificado como Azul
+Circulo 11 classificado como Verde
+Circulo 12 classificado como Vermelho
+Circulo 13 classificado como Amarelo
+Circulo 14 classificado como Vermelho
+Circulo 15 classificado como Amarelo
+Circulo 16 classificado como Amarelo
+Circulo 17 classificado como Verde
+Circulo 18 classificado como Vermelho
+Circulo 19 classificado como Vermelho
+Circulo 20 classificado como Laranja
+Circulo 21 classificado como Verde
+Circulo 22 classificado como Branco
+Circulo 23 classificado como Vermelho
+Circulo 24 classificado como Verde
+Circulo 25 classificado como Laranja
+Circulo 26 classificado como Verde
+Circulo 27 classificado como Laranja
+Circulo 28 classificado como Azul
+Circulo 29 classificado como Azul
+Circulo 30 classificado como Laranja
+Circulo 31 classificado como Azul
+Circulo 32 classificado como Verde
+Circulo 33 classificado como Azul
+Circulo 34 classificado como Azul
+Circulo 35 classificado como Laranja
+Circulo 36 classificado como Verde
+Circulo 37 classificado como Vermelho
+Circulo 38 classificado como Vermelho
+Circulo 39 classificado como Azul
+Circulo 40 classificado como Laranja
+Circulo 41 classificado como Laranja
+Circulo 42 classificado como Vermelho
+Circulo 43 classificado como Verde
+Circulo 44 classificado como Laranja
+Circulo 45 classificado como Amarelo
+Circulo 46 classificado como Verde
+Circulo 47 classificado como Laranja
+Circulo 48 classificado como Branco
+Circulo 49 classificado como Laranja
+Circulo 50 classificado como Vermelho
+Circulo 51 classificado como Verde
+Circulo 52 classificado como Vermelho
+Circulo 53 classificado como Verde
+Circulo 54 classificado como Azul
+Circulo 55 classificado como Verde
+Circulo 56 classificado como Vermelho
+Circulo 57 classificado como Azul
+Circulo 58 classificado como Amarelo
+Circulo 59 classificado como Vermelho
+Circulo 60 classificado como Laranja
+Circulo 61 classificado como Vermelho
+Circulo 62 classificado como Azul
+Circulo 63 classificado como Vermelho
+Circulo 64 classificado como Verde
+Circulo 65 classificado como Vermelho
+Circulo 66 classificado como Branco
+Circulo 67 classificado como Verde
+Circulo 68 classificado como Vermelho
+Circulo 69 classificado como Verde
+Circulo 70 classificado como Azul
+Circulo 71 classificado como Laranja
+Circulo 72 classificado como Amarelo
+Circulo 73 classificado como Amarelo
+Circulo 74 classificado como Laranja
+Circulo 75 classificado como Verde
+Circulo 76 classificado como Vermelho
+Circulo 77 classificado como Vermelho
+Circulo 78 classificado como Verde
+Circulo 79 classificado como Laranja
+Circulo 80 classificado como Verde
+Circulo 81 classificado como Vermelho
+Circulo 82 classificado como Amarelo
+Circulo 83 classificado como Laranja
+Circulo 84 classificado como Laranja
+Circulo 85 classificado como Azul
+Circulo 86 classificado como Vermelho
+Circulo 87 classificado como Vermelho
+Circulo 88 classificado como Vermelho
+Circulo 89 classificado como Verde
+Circulo 90 classificado como Vermelho
+Circulo 91 classificado como Laranja
+Circulo 92 classificado como Verde
+Circulo 93 classificado como Verde
+Circulo 94 classificado como Vermelho
+Circulo 95 classificado como Verde
+Circulo 96 classificado como Verde
+Circulo 97 classificado como Azul
+Circulo 98 classificado como Amarelo
+Circulo 99 classificado como Amarelo
+Circulo 100 classificado como Laranja
+Circulo 101 classificado como Azul
+Circulo 102 classificado como Verde
+Circulo 103 classificado como Azul
+Circulo 104 classificado como Azul
+Circulo 105 classificado como Vermelho
+Circulo 106 classificado como Laranja
+Circulo 107 classificado como Vermelho
+Circulo 108 classificado como Vermelho
+Circulo 109 classificado como Verde
+Circulo 110 classificado como Verde
+Circulo 111 classificado como Laranja
+Circulo 112 classificado como Verde
+Circulo 113 classificado como Azul
+Circulo 114 classificado como Vermelho
+Circulo 115 classificado como Laranja
+Circulo 116 classificado como Vermelho
+Circulo 117 classificado como Branco
+Circulo 118 classificado como Amarelo
+Circulo 119 classificado como Verde
+Circulo 120 classificado como Azul
+Circulo 121 classificado como Vermelho
+Circulo 122 classificado como Branco
+Circulo 123 classificado como Vermelho
+Circulo 124 classificado como Azul
+Circulo 125 classificado como Laranja
+Circulo 126 classificado como Verde
+Circulo 127 classificado como Laranja
+Circulo 128 classificado como Branco
+Circulo 129 classificado como Azul
+"""
+
+# Inicializa um dicionário para contar as cores
+contador_cores = {
+    "Branco": 0,
+    "Verde": 0,
+    "Vermelho": 0,
+    "Laranja": 0,
+    "Azul": 0,
+    "Amarelo": 0
+}
+
+# Processa cada linha do texto
+for linha in texto.split('\n'):
+    if "classificado como" in linha:
+        # Extrai a cor da linha
+        cor = linha.split("como ")[1].strip()
+        # Corrige possíveis erros de digitação
+        cor = cor.replace("Azul", "Azul").replace("Amarelo", "Amarelo").replace("Laranja", "Laranja")
+        # Incrementa o contador para a cor correspondente
+        if cor in contador_cores:
+            contador_cores[cor] += 1
+
+# Exibe os resultados
+print("QUANTIDADE DE BOLINHAS:")
+for cor, quantidade in contador_cores.items():
+    print(f"Bolinha {cor}: {quantidade}")
