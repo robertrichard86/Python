@@ -1,0 +1,45 @@
+# Dados ajustados para bolinhas de 7 cm
+largura = 200  # cm
+comprimento = 200  # cm
+altura = 36  # cm
+diametro_bolinha = 12  # cm
+area_por_bolinha = diametro_bolinha ** 2  # 49 cm²
+
+# Bolinhas por camada
+bolinhas_por_camada = int((largura * comprimento) / area_por_bolinha)  # 816
+
+# Número de camadas
+num_camadas = int(altura / diametro_bolinha)  # 5
+
+# Total de bolinhas
+total_bolinhas = bolinhas_por_camada * num_camadas  # 4.080
+
+# Proporção das cores
+bolinhas_visiveis = {
+    "Branco": 8, "Verde": 30, "Vermelho": 35,
+    "Laranja": 24, "Azul": 21, "Amarelo": 12
+}
+total_visivel = sum(bolinhas_visiveis.values())
+proporcoes = {cor: qtd / total_visivel for cor, qtd in bolinhas_visiveis.items()}
+
+# Distribuição total
+bolinhas_totais_por_cor = {
+    cor: int(proporcao * total_bolinhas)
+    for cor, proporcao in proporcoes.items()
+}
+
+# Resultados
+print("--- BOLINHAS VISÍVEIS ---")
+for cor, qtd in bolinhas_visiveis.items():
+    print(f"{cor}: {qtd}")
+print(f"\nTotal visível: {total_visivel} bolinhas")
+
+print("\n--- ESTIMATIVA REALISTA ---")
+print(f"Bolinhas por camada (7 cm): {bolinhas_por_camada}")
+print(f"Camadas (36 cm / 7 cm): {num_camadas}")
+print(f"Total estimado: {total_bolinhas} bolinhas")
+
+print("\n--- DISTRIBUIÇÃO DAS CORES ---")
+for cor, qtd in bolinhas_totais_por_cor.items():
+    print(f"{cor}: {qtd}")
+print(f"\nTotal: {sum(bolinhas_totais_por_cor.values())} bolinhas")
