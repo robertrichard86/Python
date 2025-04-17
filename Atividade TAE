@@ -1,0 +1,311 @@
+# Verifica e instala dependências necessárias
+try:
+    import openpyxl
+except ImportError:
+    import sys
+    import subprocess
+    print("Instalando openpyxl...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "openpyxl"])
+    import openpyxl
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.formula.api import ols
+import statsmodels.api as sm
+from sklearn.preprocessing import LabelEncoder
+import os
+
+# Configurações iniciais
+try:
+    plt.style.use('seaborn-v0_8')
+except:
+    plt.style.use('ggplot')
+
+pd.set_option('display.max_columns', None)
+sns.set(style="whitegrid")
+
+# Função para carregar e preparar os dados
+def load_and_prepare_data(file_path):
+    try:
+        if not os.path.exists(file_path):
+            print(f"Erro: Arquivo '{file_path}' não encontrado!")
+            print(f"O arquivo deve estar em: {os.path.abspath(os.path.dirname(__file__))}")
+            return None, None
+
+        print(f"Carregando arquivo {file_path}...")
+        desc_df = pd.read_excel(file_path, sheet_name='descricao', engine='openpyxl')
+        df = pd.read_excel(file_path, sheet_name='dados', engine='openpyxl')
+
+        print("Processando dados...")
+        for col in df.columns:
+            if df[col].dtype == object:
+                try:
+                    df[col] = df[col].str.replace(',', '.').astype(float)
+                except:
+                    pass
+
+        print("Dados carregados com sucesso!")
+        return df, desc_df
+
+    except Exception as e:
+        print(f"Erro ao carregar arquivo: {str(e)}")
+        return None, None
+
+# Função para análise descritiva básica
+def basic_descriptive_analysis(df):
+    print("\n=== Análise Descritiva Básica ===")
+    print("\nPrimeiras linhas do dataset:")
+    print(df.head())
+
+    print("\nInformações sobre o dataset:")
+    print(df.info())
+
+    print("\nEstatísticas descritivas:")
+    print(df.describe(include='all'))
+
+    print("\nValores ausentes por coluna:")
+    print(df.isnull().sum())
+
+# Função para análise de variáveis categóricas
+def analyze_categorical(df, column):
+    print(f"\n=== Análise da variável categórica: {column} ===")
+    counts = df[column].value_counts(dropna=False)
+    percentages = df[column].value_counts(normalize=True, dropna=False) * 100
+
+    summary = pd.DataFrame({
+        'Contagem': counts,
+        'Porcentagem (%)': percentages.round(2),
+        'Porcentagem Acumulada (%)': percentages.cumsum().round(2)
+    })
+
+    print(summary)
+
+    # Plot
+    plt.figure(figsize=(10, 5))
+    sns.countplot(x=column, data=df)
+    plt.title(f'Distribuição de {column}')
+    plt.xticks(rotation=45)
+    plt.show()
+
+# Função para análise de variáveis numéricas
+def analyze_numeric(df, column):
+    print(f"\n=== Análise da variável numérica: {column} ===")
+    print(df[column].describe())
+
+    # Plot
+    plt.figure(figsize=(15, 5))
+
+    plt.subplot(1, 3, 1)
+    sns.histplot(df[column], kde=True)
+    plt.title(f'Histograma de {column}')
+
+    plt.subplot(1, 3, 2)
+    sns.boxplot(y=df[column])
+    plt.title(f'Boxplot de {column}')
+
+    plt.subplot(1, 3, 3)
+    stats.probplot(df[column].dropna(), plot=plt)
+    plt.title(f'QQ-Plot de {column}')
+
+    plt.tight_layout()
+    plt.show()
+
+# Função para análise de associação entre variáveis categóricas
+def analyze_categorical_association(df, var1, var2):
+    print(f"\n=== Análise de associação entre {var1} e {var2} ===")
+
+    # Tabela de contingência
+    contingency_table = pd.crosstab(df[var1], df[var2], margins=True)
+    print("\nTabela de contingência:")
+    print(contingency_table)
+
+    # Proporções por linha
+    print("\nProporções por linha:")
+    print(pd.crosstab(df[var1], df[var2], normalize='index').round(3))
+
+    # Proporções por coluna
+    print("\nProporções por coluna:")
+    print(pd.crosstab(df[var1], df[var2], normalize='columns').round(3))
+
+    # Teste qui-quadrado
+    chi2, p, dof, expected = stats.chi2_contingency(pd.crosstab(df[var1], df[var2]))
+    print(f"\nTeste Qui-Quadrado: chi2={chi2:.3f}, p-value={p:.4f}")
+
+    # Coeficiente de contingência
+    n = contingency_table.loc['All', 'All']
+    contingency_coef = np.sqrt(chi2 / (chi2 + n))
+    print(f"Coeficiente de Contingência: {contingency_coef:.3f}")
+
+    # Plot
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(pd.crosstab(df[var1], df[var2], normalize='index'), 
+                annot=True, cmap='Blues', fmt='.2f')
+    plt.title(f'Associação entre {var1} e {var2}')
+    plt.show()
+
+# Função para análise de correlação
+def analyze_correlation(df, numeric_vars):
+    print("\n=== Análise de Correlação ===")
+
+    # Matriz de correlação
+    corr_matrix = df[numeric_vars].corr()
+    print("\nMatriz de correlação:")
+    print(corr_matrix)
+
+    # Heatmap
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f')
+    plt.title('Matriz de Correlação')
+    plt.show()
+
+    # Scatter plots para pares com alta correlação
+    high_corr = corr_matrix.unstack().sort_values(ascending=False)
+    high_corr = high_corr[high_corr < 1].head(6)  # Top 3 pares
+
+    for pair in high_corr.index:
+        var1, var2 = pair
+        plt.figure(figsize=(8, 6))
+        sns.scatterplot(x=var1, y=var2, data=df)
+        plt.title(f'Relação entre {var1} e {var2} (corr={high_corr[pair]:.2f})')
+        plt.show()
+
+# Função para análise de ratios e VIF
+def analyze_ratios_and_vif(df):
+    print("\n=== Análise de Ratios e VIF ===")
+
+    # Calcula os ratios
+    df['COL_HDL_ratio'] = df['COL'] / df['HDL']
+    df['LDL_HDL_ratio'] = df['LDL'] / df['HDL']
+    df['TRIG_HDL_ratio'] = df['TRIG'] / df['HDL']
+
+    # Sumário dos ratios
+    print("\nResumo do Ratio COL/HDL:")
+    print(df['COL_HDL_ratio'].describe())
+
+    print("\nResumo do Ratio LDL/HDL:")
+    print(df['LDL_HDL_ratio'].describe())
+
+    print("\nResumo do Ratio TRIG/HDL:")
+    print(df['TRIG_HDL_ratio'].describe())
+
+    # Histogramas dos ratios
+    plt.figure(figsize=(15, 5))
+
+    plt.subplot(1, 3, 1)
+    sns.histplot(df['COL_HDL_ratio'], kde=True)
+    plt.title('Distribuição de COL/HDL')
+
+    plt.subplot(1, 3, 2)
+    sns.histplot(df['LDL_HDL_ratio'], kde=True)
+    plt.title('Distribuição de LDL/HDL')
+
+    plt.subplot(1, 3, 3)
+    sns.histplot(df['TRIG_HDL_ratio'], kde=True)
+    plt.title('Distribuição de TRIG/HDL')
+
+    plt.tight_layout()
+    plt.show()
+
+    # Análise de VIF
+    print("\nAnálise de Multicolinearidade (VIF):")
+
+    # Seleciona variáveis para o modelo
+    X = df[['COL', 'HDL', 'LDL', 'TRIG', 'GLIC']].dropna()
+    X = sm.add_constant(X)
+
+    # Calcula VIF
+    vif_data = pd.DataFrame()
+    vif_data["Variável"] = X.columns
+    vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(len(X.columns))]
+
+    print(vif_data)
+
+# Função para análise de regressão
+def analyze_regression(df, target, predictors):
+    print(f"\n=== Análise de Regressão: {target} ~ {' + '.join(predictors)} ===")
+
+    # Prepara os dados
+    formula = f"{target} ~ {' + '.join(predictors)}"
+    model = ols(formula, data=df).fit()
+
+    # Sumário do modelo
+    print(model.summary())
+
+    # Análise de resíduos
+    residuals = model.resid
+
+    plt.figure(figsize=(15, 5))
+
+    plt.subplot(1, 3, 1)
+    sns.histplot(residuals, kde=True)
+    plt.title('Distribuição dos Resíduos')
+
+    plt.subplot(1, 3, 2)
+    stats.probplot(residuals, plot=plt)
+    plt.title('QQ-Plot dos Resíduos')
+
+    plt.subplot(1, 3, 3)
+    plt.scatter(model.fittedvalues, residuals)
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.xlabel('Valores Ajustados')
+    plt.ylabel('Resíduos')
+    plt.title('Resíduos vs Ajustados')
+
+    plt.tight_layout()
+    plt.show()
+
+# Função principal
+def main():
+    print("Iniciando análise de dados...")
+
+    # Carrega os dados
+    file_path = 'coronarias.xlsx'
+    df, desc_df = load_and_prepare_data(file_path)
+
+    if df is None:
+        print("Encerrando programa devido a erro na carga de dados.")
+        return
+
+    print("\nExecutando análise descritiva...")
+    basic_descriptive_analysis(df)
+
+    # Exemplo de análise de variáveis categóricas
+    categorical_vars = ['SEXO', 'DIAB', 'HA', 'TABAG']
+    for var in categorical_vars:
+        if var in df.columns:
+            analyze_categorical(df, var)
+        else:
+            print(f"Variável {var} não encontrada no dataframe")
+
+    # Exemplo de análise de variáveis numéricas
+    numeric_vars = ['COL', 'HDL', 'LDL', 'TRIG', 'GLIC', 'IMC']
+    for var in numeric_vars:
+        if var in df.columns:
+            analyze_numeric(df, var)
+        else:
+            print(f"Variável {var} não encontrada no dataframe")
+
+    # Análise de associação entre variáveis categóricas
+    analyze_categorical_association(df, 'DIAB', 'HA')
+    analyze_categorical_association(df, 'SEXO', 'TABAG')
+
+    # Análise de correlação entre variáveis numéricas
+    analyze_correlation(df, numeric_vars)
+
+    # Análise de ratios e VIF
+    analyze_ratios_and_vif(df)
+
+    # Análise de regressão
+    analyze_regression(df, 'IMC', ['COL', 'HDL', 'LDL', 'TRIG', 'GLIC'])
+
+if __name__ == "__main__":
+    print("Script iniciado...")
+    main()
+    print("Script finalizado.")
+    # Mantém os gráficos abertos (se estiver executando localmente)
+    if 'get_ipython' not in globals():
+        plt.show()
