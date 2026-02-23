@@ -1,0 +1,64 @@
+import pandas as pd
+import os
+import gc
+
+# 1. Defina o caminho da pasta onde você subiu os arquivos
+path = '/content/'
+files = [f for f in os.listdir(path) if f.endswith('.txt')]
+
+santos_data = {"Atracação": [], "Carga": [], "Tempos": []}
+ids_santos_global = set()
+
+print("--- Fase 1: Filtrando Atracações de Santos (2021-2025) ---")
+atracacao_files = [f for f in files if "Atracacao" in f and "Tempos" not in f]
+
+for f in atracacao_files:
+    # Lendo o arquivo completo de atracação para filtrar Santos
+    df_full = pd.read_csv(os.path.join(path, f), sep=';', encoding='latin1', low_memory=False)
+
+    # Nome da coluna corrigido conforme o arquivo TXT enviado
+    df_santos = df_full[df_full['Porto AtracaÃ§Ã£o'].str.contains('Santos', case=False, na=False)]
+
+    santos_data["Atracação"].append(df_santos)
+    # Ensure we use the correct column name, checking for BOM if present
+    id_col = 'ï»¿IDAtracacao' if 'ï»¿IDAtracacao' in df_santos.columns else 'IDAtracacao'
+    ids_santos_global.update(df_santos[id_col].unique())
+
+    print(f"✓ {f}: {len(df_santos)} atracações identificadas.")
+    del df_full, df_santos; gc.collect()
+
+print("\n--- Fase 2: Filtragem em Cascata (Carga e Tempos) ---")
+outros_files = [f for f in files if f not in atracacao_files]
+
+for f in outros_files:
+    # Lendo para verificar se o IDAtracacao pertence a Santos
+    df = pd.read_csv(os.path.join(path, f), sep=';', encoding='latin1', low_memory=False)
+
+    # Determine the correct IDAtração column name (with or without BOM)
+    id_col = None
+    if 'ï»¿IDAtracacao' in df.columns:
+        id_col = 'ï»¿IDAtracacao'
+    elif 'IDAtracacao' in df.columns:
+        id_col = 'IDAtracacao'
+
+    if id_col:
+        df_filtrado = df[df[id_col].isin(ids_santos_global)]
+
+        # Separa entre Carga e Tempos pelo nome do arquivo
+        if 'Carga' in f: # Check if 'Carga' is in the filename
+            santos_data["Carga"].append(df_filtrado)
+            tipo = "Carga"
+        else:
+            santos_data["Tempos"].append(df_filtrado)
+            tipo = "Tempos"
+
+        print(f"✓ {f}: {len(df_filtrado)} registros de {tipo} mantidos.")
+        del df, df_filtrado; gc.collect()
+
+# Consolidação Final
+df_atracacao = pd.concat(santos_data["Atracação"], ignore_index=True)
+df_carga = pd.concat(santos_data["Carga"], ignore_index=True)
+df_tempos = pd.concat(santos_data["Tempos"], ignore_index=True)
+
+print(f"\n--- CONSOLIDAÇÃO CONCLUÍDA (2023-2025) ---")
+print(f"Dataset Final: {len(df_atracacao)} Atracações | {len(df_carga)} Cargas | {len(df_tempos)} Tempos")
